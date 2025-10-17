@@ -57,7 +57,7 @@ SQLite provides all necessary database features while keeping setup simple and a
 
 ## 🔐 Authentication & Authorization
 
-**NEW:** Complete login system with role-based access control!
+**Complete login system with role-based access control and simplified Identity model!**
 
 ### User Roles
 - **Admin** - Full access including DELETE operations
@@ -70,14 +70,44 @@ Staff:  staff@inventory.com / Staff@123
 ```
 
 ### Security Features
-- ✅ Login/Logout functionality
-- ✅ Role-based authorization
-- ✅ Protected admin pages (requires login)
-- ✅ Session management (2-hour timeout)
-- ✅ Account lockout after failed attempts
-- ✅ Remember me functionality
+- ✅ **Secure Password Hashing** - PBKDF2 algorithm (ASP.NET Core Identity default)
+- ✅ **Login/Logout** functionality
+- ✅ **Role-based authorization** with `[Authorize(Roles = "...")]` attributes
+- ✅ **Protected admin pages** (requires login)
+- ✅ **Session management** (2-hour timeout with sliding expiration)
+- ✅ **Account lockout** after 5 failed attempts (5-minute lockout)
+- ✅ **Remember me** functionality
+- ✅ **Security stamp** for token invalidation
 
-**See** `AUTHENTICATION_GUIDE.md` for complete details
+### Simplified Identity Model
+This project uses a **simplified ASP.NET Core Identity** implementation:
+
+#### Users Table (8 columns instead of 20+):
+- `Id` - Primary key
+- `UserName` - Login username
+- `Email` - User email
+- `Password` - Secure password hash (PBKDF2)
+- `FullName` - Display name (custom property)
+- `IsActive` - User enabled/disabled status
+- `AccessFailedCount` - Login attempt tracking
+- `SecurityStamp` - Security token invalidation
+
+#### Roles Table (2 columns instead of 3):
+- `Id` - Primary key
+- `Name` - Role name (Admin, Staff, etc.)
+
+#### Removed Complexity:
+- ❌ Email confirmation (not needed for internal app)
+- ❌ Phone number fields (not needed)
+- ❌ Two-factor authentication (not needed)
+- ❌ External login providers (not needed)
+- ❌ Normalized columns (handled in code)
+
+**Benefits:**
+- 🚀 **Faster performance** - Fewer columns to read/write
+- 🧹 **Cleaner database** - Only essential data
+- 📖 **Easier to understand** - Simple, intuitive structure
+- 🔒 **Still secure** - PBKDF2 password hashing maintained
 
 ---
 
@@ -430,6 +460,24 @@ For now, all endpoints are open for testing purposes.
 **Database File:** `OnlineInventory.db` (SQLite - single file database)
 
 ```
+Users (Simplified Identity)
+├── Id (PK)
+├── UserName
+├── Email
+├── Password (PBKDF2 hash)
+├── FullName
+├── IsActive
+├── AccessFailedCount
+└── SecurityStamp
+
+Roles (Simplified Identity)
+├── Id (PK)
+└── Name
+
+UserRoles (Identity junction table)
+├── UserId (FK)
+└── RoleId (FK)
+
 Categories
 ├── Id (PK)
 ├── Name (Unique Index)
@@ -488,15 +536,30 @@ This project implements several EF Core optimizations:
 
 ## 🔐 Security Considerations
 
-⚠️ **Note:** This is a demonstration project. For production use, add:
+### ✅ Implemented Security Features
 
-- Authentication & Authorization (e.g., ASP.NET Core Identity)
-- Input validation and sanitization
-- HTTPS enforcement
-- CORS policies (currently open for development)
+- ✅ **Authentication & Authorization** - ASP.NET Core Identity with simplified model
+- ✅ **Password Hashing** - PBKDF2 algorithm (industry standard)
+- ✅ **Account Lockout** - 5 failed attempts = 5-minute lockout
+- ✅ **Role-Based Access Control** - Admin and Staff roles with different permissions
+- ✅ **Session Management** - 2-hour timeout with sliding expiration
+- ✅ **SQL Injection Prevention** - EF Core parameterized queries
+- ✅ **HTTPS Enforcement** - Configured in production
+- ✅ **Anti-Forgery Tokens** - Enabled on all forms
+- ✅ **Security Stamp** - Token invalidation on password change
+
+### ⚠️ Additional Production Recommendations
+
+For production deployment, consider adding:
+
 - Rate limiting for API endpoints
-- SQL injection prevention (EF Core provides this by default)
-- XSS protection in views
+- Response compression
+- CORS policies (currently open for development)
+- Application monitoring (Application Insights, Serilog)
+- IP whitelisting for admin endpoints
+- Two-factor authentication (optional)
+- Password reset functionality
+- Email confirmation (optional)
 
 ---
 
@@ -504,6 +567,8 @@ This project implements several EF Core optimizations:
 
 The application automatically seeds the database with:
 
+- **2 User Accounts:** Admin and Staff with secure PBKDF2 password hashes
+- **2 Roles:** Admin and Staff
 - **6 Categories:** Electronics, Clothing, Books, Home & Garden, Sports & Outdoors, Toys & Games
 - **21 Products:** Sample products across all categories
 - **Initial Inventory Transactions:** One per product with reason "Initial Stock"
@@ -595,8 +660,8 @@ For questions or issues:
 
 Future enhancements to consider:
 
-- [ ] User authentication and authorization
-- [ ] Role-based access control
+- [x] User authentication and authorization ✅ **IMPLEMENTED**
+- [x] Role-based access control ✅ **IMPLEMENTED**
 - [ ] Advanced reporting and analytics
 - [ ] Export to Excel/PDF
 - [ ] Email notifications
@@ -626,5 +691,6 @@ Future enhancements to consider:
 **Last Updated:** October 17, 2025  
 **Status:** ✅ Production Ready (with security enhancements for production use)
 
-#   o n l i n e - i n v e n t o r y  
+#   o n l i n e - i n v e n t o r y 
+ 
  

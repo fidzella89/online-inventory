@@ -1,0 +1,118 @@
+═══════════════════════════════════════════════════════════════
+  🔐 ONLINE INVENTORY MANAGEMENT - LOGIN CREDENTIALS
+═══════════════════════════════════════════════════════════════
+
+📧 ADMIN ACCOUNT
+   Email:    admin@inventory.com
+   Password: Admin@123
+   Role:     Admin (FULL ACCESS - Can DELETE products)
+
+📧 STAFF ACCOUNT
+   Email:    staff@inventory.com
+   Password: Staff@123
+   Role:     Staff (LIMITED - Cannot DELETE products)
+
+🔒 PASSWORD SECURITY
+   - Algorithm: PBKDF2 (ASP.NET Core Identity default)
+   - Secure hashing with salt
+   - Stored in 'Password' column (renamed from 'PasswordHash')
+   - Account lockout: 5 failed attempts = 5-minute lockout
+
+═══════════════════════════════════════════════════════════════
+
+🚀 QUICK START
+
+1. Run Application:
+   dotnet run
+
+2. Open Browser:
+   https://localhost:5001
+
+3. Click "Login" (top right)
+
+4. Enter credentials above
+
+5. Access management features!
+
+═══════════════════════════════════════════════════════════════
+
+🔄 RESET DATABASE (If Needed)
+
+   dotnet ef database drop --force
+   dotnet ef database update
+   dotnet run
+
+═══════════════════════════════════════════════════════════════
+
+✨ NEW FEATURES
+
+✅ Simplified Identity Model (Clean Database)
+   - Users table: Only 8 columns (down from 20+)
+   - Roles table: Only 2 columns (down from 3)
+   - Removed: Email confirmation, phone, 2FA, external logins
+   - Renamed: PasswordHash → Password, LockoutEnabled → IsActive
+
+✅ Login system with roles
+✅ Protected admin pages
+✅ Role-based permissions:
+   - Admin: Can DELETE products
+   - Staff: CANNOT delete (button disabled)
+   
+✅ Inline action buttons in product list:
+   [Edit] [Stock] [Delete/Disabled]
+   
+✅ Quick stock adjustment from product list
+✅ No more navigation confusion!
+✅ User dropdown with role badge
+✅ Auto-logout after 2 hours
+✅ Secure PBKDF2 password hashing
+
+⚠️ KEY DIFFERENCE:
+   Staff sees DISABLED delete button
+   Only Admin can delete products!
+
+═══════════════════════════════════════════════════════════════
+
+📚 DOCUMENTATION
+
+- README.md                → Updated with Identity simplification
+- PROJECT_SUMMARY.md       → Complete project overview
+- LOGIN_INFO.txt           → This file (login credentials)
+- Testing/                 → Happy path test cases
+
+═══════════════════════════════════════════════════════════════
+
+🎯 IMPORTANT URLS
+
+Home:      https://localhost:5001
+Login:     https://localhost:5001/Account/Login
+Products:  https://localhost:5001/Admin/Products
+Inventory: https://localhost:5001/Admin/Inventory/Transactions
+Orders:    https://localhost:5001/Admin/Orders
+Swagger:   https://localhost:5001/swagger
+
+═══════════════════════════════════════════════════════════════
+
+💾 DATABASE SCHEMA (Simplified Identity)
+
+Users Table:
+├── Id                   (Primary Key)
+├── UserName            (Login name)
+├── Email               (User email)
+├── Password            (PBKDF2 hash - renamed from PasswordHash)
+├── FullName            (Display name - custom)
+├── IsActive            (Enabled/disabled - renamed from LockoutEnabled)
+├── AccessFailedCount   (Failed login attempts)
+└── SecurityStamp       (Token invalidation)
+
+Roles Table:
+├── Id                   (Primary Key)
+└── Name                (Role name: Admin, Staff)
+
+Benefits: Faster, cleaner, easier to maintain!
+
+═══════════════════════════════════════════════════════════════
+
+Last Updated: October 17, 2025
+Status: ✅ Ready for Testing with Simplified Identity!
+

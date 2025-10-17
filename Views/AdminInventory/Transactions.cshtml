@@ -1,0 +1,79 @@
+@model OnlineInventory.ViewModels.InventoryTransactionListViewModel
+@{
+    ViewData["Title"] = "Inventory Transactions";
+}
+
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>Inventory Transactions</h2>
+    </div>
+
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            @TempData["SuccessMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    }
+
+    <div class="table-responsive">
+        <table class="table table-striped table-hover">
+            <thead class="table-dark">
+                <tr>
+                    <th>Date/Time</th>
+                    <th>Product</th>
+                    <th>SKU</th>
+                    <th>Change</th>
+                    <th>Reason</th>
+                    <th class="text-center">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var transaction in Model.Transactions)
+                {
+                    <tr>
+                        <td>@transaction.Timestamp.ToLocalTime().ToString("yyyy-MM-dd HH:mm:ss")</td>
+                        <td>@transaction.ProductName</td>
+                        <td>@transaction.ProductSKU</td>
+                        <td>
+                            <span class="badge @(transaction.QuantityChange > 0 ? "bg-success" : "bg-danger")">
+                                @(transaction.QuantityChange > 0 ? "+" : "")@transaction.QuantityChange
+                            </span>
+                        </td>
+                        <td>@transaction.Reason</td>
+                        <td class="text-center">
+                            <a asp-action="Adjust" asp-route-productId="@transaction.ProductId" 
+                               class="btn btn-sm btn-outline-success"
+                               title="Adjust Stock">
+                                <i class="bi bi-plus-slash-minus"></i> Adjust
+                            </a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+    @if (Model.TotalPages > 1)
+    {
+        <nav>
+            <ul class="pagination justify-content-center">
+                <li class="page-item @(Model.Page == 1 ? "disabled" : "")">
+                    <a class="page-link" href="?page=@(Model.Page - 1)">Previous</a>
+                </li>
+                @for (int i = 1; i <= Model.TotalPages; i++)
+                {
+                    <li class="page-item @(i == Model.Page ? "active" : "")">
+                        <a class="page-link" href="?page=@i">@i</a>
+                    </li>
+                }
+                <li class="page-item @(Model.Page == Model.TotalPages ? "disabled" : "")">
+                    <a class="page-link" href="?page=@(Model.Page + 1)">Next</a>
+                </li>
+            </ul>
+        </nav>
+    }
+
+    <p class="text-muted text-center">Showing @Model.Transactions.Count of @Model.TotalCount transactions</p>
+</div>
+

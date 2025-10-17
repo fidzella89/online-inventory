@@ -1,0 +1,167 @@
+@model OnlineInventory.ViewModels.ProductListViewModel
+@{
+    ViewData["Title"] = "Products";
+}
+
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>Product Management</h2>
+        <a asp-action="Create" class="btn btn-primary">
+            <i class="bi bi-plus-circle"></i> Add New Product
+        </a>
+    </div>
+
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            @TempData["SuccessMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    }
+
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            @TempData["ErrorMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    }
+
+    <div class="card mb-4">
+        <div class="card-body">
+            <form method="get" class="row g-3">
+                <div class="col-md-4">
+                    <input type="text" name="search" class="form-control" placeholder="Search products..." value="@Model.SearchTerm" />
+                </div>
+                <div class="col-md-3">
+                    <select name="categoryId" class="form-select">
+                        <option value="">All Categories</option>
+                        @foreach (var category in (ViewBag.Categories as SelectList) ?? new SelectList(Enumerable.Empty<object>()))
+                        {
+                            <option value="@category.Value" selected="@(category.Value == Model.CategoryFilter?.ToString())">@category.Text</option>
+                        }
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <select name="sortBy" class="form-select">
+                        <option value="">Default Sort</option>
+                        <option value="name_asc" selected="@(Model.SortBy == "name_asc")">Name (A-Z)</option>
+                        <option value="name_desc" selected="@(Model.SortBy == "name_desc")">Name (Z-A)</option>
+                        <option value="price_asc" selected="@(Model.SortBy == "price_asc")">Price (Low-High)</option>
+                        <option value="price_desc" selected="@(Model.SortBy == "price_desc")">Price (High-Low)</option>
+                        <option value="stock_asc" selected="@(Model.SortBy == "stock_asc")">Stock (Low-High)</option>
+                        <option value="stock_desc" selected="@(Model.SortBy == "stock_desc")">Stock (High-Low)</option>
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <button type="submit" class="btn btn-secondary w-100">Filter</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="table-responsive">
+        <table class="table table-striped table-hover align-middle">
+            <thead class="table-dark">
+                <tr>
+                    <th>SKU</th>
+                    <th>Name</th>
+                    <th>Category</th>
+                    <th class="text-end">Price</th>
+                    <th class="text-center">Stock</th>
+                    <th class="text-center" style="width: 250px;">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var product in Model.Products)
+                {
+                    <tr>
+                        <td><code>@product.SKU</code></td>
+                        <td><strong>@product.Name</strong></td>
+                        <td>
+                            <span class="badge bg-secondary">@product.CategoryName</span>
+                        </td>
+                        <td class="text-end"><strong>@product.Price.ToString("C")</strong></td>
+                        <td class="text-center">
+                            <span class="badge @(product.QuantityInStock < 10 ? "bg-danger" : product.QuantityInStock < 50 ? "bg-warning text-dark" : "bg-success")" style="min-width: 50px;">
+                                @product.QuantityInStock
+                            </span>
+                        </td>
+                        <td class="text-center">
+                            <div class="btn-group btn-group-sm" role="group">
+                                <a asp-action="Edit" asp-route-id="@product.Id" 
+                                   class="btn btn-outline-primary" 
+                                   title="Edit Product">
+                                    <i class="bi bi-pencil"></i> Edit
+                                </a>
+                                <a asp-controller="AdminInventory" 
+                                   asp-action="Adjust" 
+                                   asp-route-productId="@product.Id" 
+                                   class="btn btn-outline-success"
+                                   title="Adjust Stock">
+                                    <i class="bi bi-plus-slash-minus"></i> Stock
+                                </a>
+                                @if (User.IsInRole("Admin"))
+                                {
+                                    <button type="button" 
+                                            class="btn btn-outline-danger" 
+                                            onclick="deleteProduct(@product.Id, '@product.Name')"
+                                            title="Delete Product (Admin Only)">
+                                        <i class="bi bi-trash"></i>
+                                    </button>
+                                }
+                                else
+                                {
+                                    <button type="button" 
+                                            class="btn btn-outline-secondary disabled" 
+                                            title="Delete requires Admin role"
+                                            disabled>
+                                        <i class="bi bi-trash"></i>
+                                    </button>
+                                }
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Hidden delete form -->
+    <form id="deleteForm" method="post" style="display: none;">
+        @Html.AntiForgeryToken()
+    </form>
+
+    <script>
+        function deleteProduct(id, name) {
+            if (confirm('Are you sure you want to delete "' + name + '"?\n\nThis action cannot be undone.')) {
+                var form = document.getElementById('deleteForm');
+                form.action = '/Admin/Products/Delete/' + id;
+                form.submit();
+            }
+        }
+    </script>
+
+    @if (Model.TotalPages > 1)
+    {
+        <nav>
+            <ul class="pagination justify-content-center">
+                <li class="page-item @(Model.Page == 1 ? "disabled" : "")">
+                    <a class="page-link" href="?page=@(Model.Page - 1)&search=@Model.SearchTerm&categoryId=@Model.CategoryFilter&sortBy=@Model.SortBy">Previous</a>
+                </li>
+                @for (int i = 1; i <= Model.TotalPages; i++)
+                {
+                    <li class="page-item @(i == Model.Page ? "active" : "")">
+                        <a class="page-link" href="?page=@i&search=@Model.SearchTerm&categoryId=@Model.CategoryFilter&sortBy=@Model.SortBy">@i</a>
+                    </li>
+                }
+                <li class="page-item @(Model.Page == Model.TotalPages ? "disabled" : "")">
+                    <a class="page-link" href="?page=@(Model.Page + 1)&search=@Model.SearchTerm&categoryId=@Model.CategoryFilter&sortBy=@Model.SortBy">Next</a>
+                </li>
+            </ul>
+        </nav>
+    }
+
+    <p class="text-muted text-center">Showing @Model.Products.Count of @Model.TotalCount products</p>
+</div>
+
