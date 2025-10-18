@@ -163,11 +163,11 @@ public class ProductsController : Controller
             var success = await _productService.DeleteProductAsync(id);
             if (success)
             {
-                TempData["SuccessMessage"] = "Product deleted successfully.";
+                TempData["SuccessMessage"] = "Product removed from inventory successfully.";
             }
             else
             {
-                TempData["ErrorMessage"] = "Product not found.";
+                TempData["ErrorMessage"] = "Product not found or already removed.";
             }
         }
         catch (Exception ex)

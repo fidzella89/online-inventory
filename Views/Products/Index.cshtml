@@ -105,8 +105,8 @@
                                 {
                                     <button type="button" 
                                             class="btn btn-outline-danger" 
-                                            onclick="deleteProduct(@product.Id, '@product.Name')"
-                                            title="Delete Product (Admin Only)">
+                                            onclick="removeProduct(@product.Id, '@product.Name')"
+                                            title="Remove Product from Inventory (Admin Only)">
                                         <i class="bi bi-trash"></i>
                                     </button>
                                 }
@@ -124,10 +124,10 @@
     </form>
 
     <script>
-        function deleteProduct(id, name) {
-            if (confirm('Are you sure you want to delete "' + name + '"?\n\nThis action cannot be undone.')) {
+        function removeProduct(id, name) {
+            if (confirm('Are you sure you want to remove "' + name + '" from inventory?\n\nThis will hide the product from the list but keep the data safe for future reference.')) {
                 var form = document.getElementById('deleteForm');
-                form.action = '/Admin/Products/Delete/' + id;
+                form.action = '/Products/Delete/' + id;
                 form.submit();
             }
         }

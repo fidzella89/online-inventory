@@ -64,14 +64,14 @@
                                                     @if (category.ProductCount == 0)
                                                     {
                                                 <button type="button" class="btn btn-sm btn-outline-danger" 
-                                                        data-bs-toggle="modal" data-bs-target="#deleteModal-@category.Id" title="Soft Delete Category">
+                                                        data-bs-toggle="modal" data-bs-target="#deleteModal-@category.Id" title="Remove Category from System">
                                                             <i class="bi bi-trash"></i>
                                                         </button>
                                                     }
                                                     else
                                                     {
                                                         <button type="button" class="btn btn-sm btn-outline-secondary" 
-                                                                disabled title="Cannot delete - has products">
+                                                                disabled title="Cannot remove - category has products">
                                                             <i class="bi bi-trash"></i>
                                                         </button>
                                                     }
@@ -82,17 +82,17 @@
                                                     <div class="modal-dialog">
                                                         <div class="modal-content">
                                                             <div class="modal-header">
-                                                                <h5 class="modal-title">Confirm Delete</h5>
+                                                                <h5 class="modal-title">Remove Category</h5>
                                                                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                                                             </div>
                                                             <div class="modal-body">
-                                                                <p>Are you sure you want to soft delete the category <strong>"@category.Name"</strong>?</p>
-                                                                <p class="text-muted small">This will hide the category from the list but keep it in the database. It can be restored later if needed.</p>
+                                                                <p>Are you sure you want to remove the category <strong>"@category.Name"</strong> from the system?</p>
+                                                                <p class="text-muted small">This will hide the category from the list but keep all data safe for future reference. It can be restored later if needed.</p>
                                                             </div>
                                                             <div class="modal-footer">
                                                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
                                                                 <form asp-action="Delete" asp-route-id="@category.Id" method="post" class="d-inline">
-                                                                    <button type="submit" class="btn btn-danger">Delete</button>
+                                                                    <button type="submit" class="btn btn-danger">Remove</button>
                                                                 </form>
                                                             </div>
                                                         </div>

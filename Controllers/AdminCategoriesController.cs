@@ -121,7 +121,7 @@ public class AdminCategoriesController : Controller
             }
             else
             {
-                TempData["SuccessMessage"] = "Category deleted successfully.";
+                TempData["SuccessMessage"] = "Category removed from system successfully.";
             }
         }
         catch (Exception ex)
