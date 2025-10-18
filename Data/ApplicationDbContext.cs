@@ -14,9 +14,6 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
 
     public DbSet<Product> Products => Set<Product>();
     public DbSet<Category> Categories => Set<Category>();
-    public DbSet<Order> Orders => Set<Order>();
-    public DbSet<OrderItem> OrderItems => Set<OrderItem>();
-    public DbSet<InventoryTransaction> InventoryTransactions => Set<InventoryTransaction>();
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
@@ -98,47 +95,6 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
             entity.HasIndex(e => e.Name).IsUnique();
         });
 
-        // Order configuration
-        modelBuilder.Entity<Order>(entity =>
-        {
-            entity.HasKey(e => e.Id);
-            entity.HasIndex(e => e.CreatedAt);
-            
-            entity.Property(e => e.Total).HasPrecision(18, 2);
-        });
-
-        // OrderItem configuration
-        modelBuilder.Entity<OrderItem>(entity =>
-        {
-            entity.HasKey(e => e.Id);
-            entity.HasIndex(e => e.OrderId);
-            entity.HasIndex(e => e.ProductId);
-            
-            entity.Property(e => e.UnitPrice).HasPrecision(18, 2);
-            
-            entity.HasOne(e => e.Order)
-                  .WithMany(o => o.Items)
-                  .HasForeignKey(e => e.OrderId)
-                  .OnDelete(DeleteBehavior.Cascade);
-                  
-            entity.HasOne(e => e.Product)
-                  .WithMany()
-                  .HasForeignKey(e => e.ProductId)
-                  .OnDelete(DeleteBehavior.Restrict);
-        });
-
-        // InventoryTransaction configuration
-        modelBuilder.Entity<InventoryTransaction>(entity =>
-        {
-            entity.HasKey(e => e.Id);
-            entity.HasIndex(e => e.ProductId);
-            entity.HasIndex(e => e.Timestamp);
-            
-            entity.HasOne(e => e.Product)
-                  .WithMany(p => p.InventoryTransactions)
-                  .HasForeignKey(e => e.ProductId)
-                  .OnDelete(DeleteBehavior.Cascade);
-        });
     }
 }
 

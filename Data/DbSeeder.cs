@@ -45,22 +45,6 @@ public static class DbSeeder
         
         context.Products.AddRange(products);
         await context.SaveChangesAsync();
-
-        // Seed Initial Inventory Transactions
-        var transactions = new List<InventoryTransaction>();
-        foreach (var product in products)
-        {
-            transactions.Add(new InventoryTransaction
-            {
-                ProductId = product.Id,
-                QuantityChange = product.QuantityInStock,
-                Timestamp = DateTime.UtcNow.AddDays(-30),
-                Reason = "Initial Stock"
-            });
-        }
-        
-        context.InventoryTransactions.AddRange(transactions);
-        await context.SaveChangesAsync();
     }
 }
 

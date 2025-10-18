@@ -38,10 +38,11 @@ This testing phase covers:
 - **Authentication System:** Login/logout functionality
 - **Product Management:** CRUD operations for products
 - **Inventory Management:** Stock adjustments and tracking
-- **Order Management:** Order creation and processing
-- **API Endpoints:** RESTful API functionality
+- **Category Management:** Admin-only category CRUD operations
+- **API Endpoints:** RESTful API functionality with proper authorization
 - **User Interface:** MVC views and user interactions
 - **Database Operations:** Data persistence and retrieval
+- **Role-Based Access Control:** Admin vs Staff permissions
 
 ### Success Criteria
 
@@ -52,6 +53,7 @@ The testing is considered successful when:
 - ✅ Data integrity is maintained throughout all operations
 - ✅ User experience is smooth and intuitive
 - ✅ API responses are accurate and consistent
+- ✅ Role-based access control works properly
 - ✅ No major defects are discovered
 
 ---
@@ -64,16 +66,22 @@ The testing is considered successful when:
 - Visual Studio 2022 or VS Code (optional)
 
 ### Application Access
-- **Home Page:** https://localhost:5001
-- **Login Page:** https://localhost:5001/Account/Login
-- **Admin Panel:** https://localhost:5001/Admin/Products
-- **API Documentation:** https://localhost:5001/swagger
+- **Home Page:** http://localhost:5000
+- **Login Page:** http://localhost:5000/Account/Login
+- **Product Management:** http://localhost:5000/Products
+- **Inventory Management:** http://localhost:5000/Inventory
+- **Category Management (Admin):** http://localhost:5000/Admin/Categories
+- **API Documentation:** http://localhost:5000/swagger
 
 ### Test Data
-- **5 Sample Products** across different categories
-- **6 Product Categories** for organization
+- **Sample Products** across different categories
+- **Product Categories** for organization
 - **2 User Accounts** (Admin and Staff) with different permissions
-- **Pre-seeded inventory transactions** for tracking
+- **Pre-seeded inventory data** for tracking
+
+### User Roles
+- **Admin:** Full access to all features including category management
+- **Staff:** Access to products and inventory, but not category management
 
 ---
 
@@ -89,10 +97,34 @@ After completing happy path testing, the team should have:
 
 ---
 
+## Key Features to Test
+
+### Web Interface Features
+- **Product Management:** Create, read, update, delete products
+- **Inventory Management:** View and adjust stock levels
+- **Category Management:** Admin-only category CRUD operations
+- **Authentication:** Login/logout with role-based access
+- **Navigation:** Proper menu visibility based on user role
+
+### API Features
+- **Products API:** Full CRUD operations for products
+- **Inventory API:** Stock management and low stock alerts
+- **Categories API:** Admin-only category management
+- **Authentication API:** Login/logout functionality
+- **Authorization:** Proper role-based access control
+
+### Security Features
+- **Role-Based Access:** Admin vs Staff permissions
+- **API Protection:** Proper authorization on all endpoints
+- **Data Validation:** Input validation and error handling
+- **Session Management:** Secure user sessions
+
+---
+
 ## Next Steps
 
-1. **Review Testing Process:** Follow the 10-step testing methodology
-2. **Execute Test Cases:** Complete all assigned test scenarios
+1. **Review Testing Process:** Follow the testing methodology
+2. **Execute Test Cases:** Complete all 36 assigned test scenarios
 3. **Document Results:** Record findings and observations
 4. **Report Findings:** Generate comprehensive test report
 5. **Plan Next Phase:** Prepare for additional testing if needed

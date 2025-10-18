@@ -1,0 +1,94 @@
+@model OnlineInventory.ViewModels.InventoryIndexViewModel
+
+@{
+    ViewData["Title"] = "Inventory Management";
+}
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2><i class="bi bi-clipboard-data"></i> Inventory Management</h2>
+            </div>
+
+            @if (TempData["SuccessMessage"] != null)
+            {
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    <i class="bi bi-check-circle"></i> @TempData["SuccessMessage"]
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            }
+
+            <div class="card shadow-sm">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0"><i class="bi bi-box-seam"></i> Product Stock Levels</h5>
+                </div>
+                <div class="card-body p-0">
+                    @if (Model.Products.Any())
+                    {
+                        <div class="table-responsive">
+                            <table class="table table-hover mb-0">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>SKU</th>
+                                        <th>Product Name</th>
+                                        <th>Category</th>
+                                        <th class="text-center">Current Stock</th>
+                                        <th class="text-center">Status</th>
+                                        <th class="text-center">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var product in Model.Products)
+                                    {
+                                        <tr>
+                                            <td><code>@product.SKU</code></td>
+                                            <td>@product.Name</td>
+                                            <td>@product.Category</td>
+                                            <td class="text-center">
+                                                <span class="badge bg-secondary fs-6">@product.CurrentStock</span>
+                                            </td>
+                                            <td class="text-center">
+                                                @if (product.CurrentStock == 0)
+                                                {
+                                                    <span class="badge bg-danger">Out of Stock</span>
+                                                }
+                                                else if (product.CurrentStock <= 10)
+                                                {
+                                                    <span class="badge bg-warning">Low Stock</span>
+                                                }
+                                                else
+                                                {
+                                                    <span class="badge bg-success">In Stock</span>
+                                                }
+                                            </td>
+                                            <td class="text-center">
+                                                <a href="@Url.Action("Adjust", new { id = product.Id })" 
+                                                   class="btn btn-sm btn-outline-primary">
+                                                    <i class="bi bi-pencil"></i> Adjust Stock
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="text-center py-5">
+                            <i class="bi bi-inbox display-1 text-muted"></i>
+                            <h4 class="text-muted mt-3">No Products Found</h4>
+                            <p class="text-muted">Add some products to manage inventory.</p>
+                            <a href="@Url.Action("Index", "AdminProducts")" class="btn btn-primary">
+                                <i class="bi bi-plus-circle"></i> Add Products
+                            </a>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">

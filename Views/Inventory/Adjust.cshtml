@@ -1,0 +1,129 @@
+@model OnlineInventory.ViewModels.StockAdjustmentViewModel
+
+@{
+    ViewData["Title"] = "Adjust Stock";
+}
+
+<div class="container-fluid">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+            <div class="card shadow-sm">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0"><i class="bi bi-pencil"></i> Adjust Stock</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row mb-3">
+                        <div class="col-sm-3"><strong>Product:</strong></div>
+                        <div class="col-sm-9">@Model.ProductName</div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-sm-3"><strong>SKU:</strong></div>
+                        <div class="col-sm-9"><code>@Model.SKU</code></div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-sm-3"><strong>Current Stock:</strong></div>
+                        <div class="col-sm-9">
+                            <span class="badge bg-secondary fs-6">@Model.CurrentStock</span>
+                        </div>
+                    </div>
+
+                    <hr>
+
+                    <form asp-action="Adjust" method="post">
+                        <input asp-for="ProductId" type="hidden" />
+                        <input asp-for="ProductName" type="hidden" />
+                        <input asp-for="SKU" type="hidden" />
+                        <input asp-for="CurrentStock" type="hidden" />
+
+                        <div class="mb-3">
+                            <label asp-for="Adjustment" class="form-label">
+                                <i class="bi bi-plus-minus"></i> Stock Adjustment
+                            </label>
+                            <div class="input-group">
+                                <span class="input-group-text">
+                                    <i class="bi bi-info-circle" data-bs-toggle="tooltip" 
+                                       title="Positive numbers increase stock, negative numbers decrease stock"></i>
+                                </span>
+                                <input asp-for="Adjustment" class="form-control" 
+                                       placeholder="Enter adjustment amount" />
+                                <span class="input-group-text">units</span>
+                            </div>
+                            <span asp-validation-for="Adjustment" class="text-danger"></span>
+                            <div class="form-text">
+                                <strong>Examples:</strong> +50 (add 50 units), -25 (remove 25 units)
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="Reason" class="form-label">
+                                <i class="bi bi-chat-text"></i> Reason for Adjustment
+                            </label>
+                            <textarea asp-for="Reason" class="form-control" rows="3" 
+                                      placeholder="Enter reason for this stock adjustment..."></textarea>
+                            <span asp-validation-for="Reason" class="text-danger"></span>
+                        </div>
+
+                        <div class="d-flex justify-content-between">
+                            <a href="@Url.Action("Index")" class="btn btn-secondary">
+                                <i class="bi bi-arrow-left"></i> Back to Inventory
+                            </a>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="bi bi-check-circle"></i> Apply Adjustment
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            @if (Model.Adjustment != 0)
+            {
+                <div class="card mt-3 border-info">
+                    <div class="card-header bg-info text-white">
+                        <h6 class="mb-0"><i class="bi bi-calculator"></i> Preview</h6>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-sm-4"><strong>Current Stock:</strong></div>
+                            <div class="col-sm-2">@Model.CurrentStock</div>
+                            <div class="col-sm-1 text-center">+</div>
+                            <div class="col-sm-2">@Model.Adjustment</div>
+                            <div class="col-sm-1 text-center">=</div>
+                            <div class="col-sm-2">
+                                <span class="badge bg-primary fs-6">@(Model.CurrentStock + Model.Adjustment)</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        // Initialize tooltips
+        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+        var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+            return new bootstrap.Tooltip(tooltipTriggerEl);
+        });
+
+        // Update preview when adjustment changes
+        document.getElementById('Adjustment').addEventListener('input', function() {
+            const adjustment = parseInt(this.value) || 0;
+            const currentStock = @Model.CurrentStock;
+            const newStock = currentStock + adjustment;
+            
+            // Update preview if it exists
+            const preview = document.querySelector('.card.border-info');
+            if (preview) {
+                const newStockElement = preview.querySelector('.badge.bg-primary');
+                if (newStockElement) {
+                    newStockElement.textContent = newStock;
+                }
+            }
+        });
+    </script>
+}
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">

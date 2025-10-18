@@ -51,23 +51,7 @@ public class ProductService : IProductService
         };
 
         await _unitOfWork.Products.AddAsync(product);
-        
-        // Save the product first to get the generated ID
         await _unitOfWork.SaveChangesAsync();
-        
-        // Create initial inventory transaction if stock > 0
-        if (dto.QuantityInStock > 0)
-        {
-            var transaction = new InventoryTransaction
-            {
-                ProductId = product.Id, // Now product.Id has a valid value
-                QuantityChange = dto.QuantityInStock,
-                Timestamp = DateTime.UtcNow,
-                Reason = "Initial Stock"
-            };
-            await _unitOfWork.InventoryTransactions.AddAsync(transaction);
-            await _unitOfWork.SaveChangesAsync();
-        }
 
         return (await _unitOfWork.Products.GetProductDtoByIdAsync(product.Id))!;
     }

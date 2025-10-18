@@ -1,6 +1,6 @@
-# Online Inventory Management System
+# Online Product Management System
 
-A complete web application for managing products, inventory, and orders with full authentication, role-based access control, and comprehensive testing documentation.
+A complete web application for managing products and categories with full authentication, role-based access control, and comprehensive testing documentation.
 
 ![.NET Version](https://img.shields.io/badge/.NET-9.0-512BD4)
 ![EF Core](https://img.shields.io/badge/EF%20Core-9.0-512BD4)
@@ -15,11 +15,11 @@ This is a **complete web application** built with ASP.NET Core MVC that provides
 
 - **🔐 Full Authentication System** - Login/logout with role-based access control
 - **📦 Product Management** - Complete CRUD operations with search and filtering
-- **📊 Inventory Management** - Real-time stock tracking and adjustments
-- **🛒 Order Management** - Order creation and processing with automatic inventory updates
+- **📊 Inventory Management** - Stock tracking and adjustments
+- **🏷️ Category Management** - Admin-only category organization
 - **🌐 RESTful API** - Complete API with Swagger documentation
 - **📱 Responsive UI** - Modern Bootstrap 5 interface
-- **🧪 Comprehensive Testing** - 30 test cases covering all functionality
+- **🧪 Comprehensive Testing** - 36 test cases covering all functionality
 
 ---
 
@@ -56,6 +56,18 @@ Staff:  staff@inventory.com / staff123
 
 ---
 
+## 🔐 Security Features
+- ✅ **Secure Password Hashing** - PBKDF2 algorithm
+- ✅ **Role-Based Access Control** - Different permissions for Admin/Staff
+- ✅ **Session Management** - 2-hour timeout with sliding expiration
+- ✅ **Account Lockout** - 5 failed attempts = 5-minute lockout
+- ✅ **Remember Me** - Persistent login option
+- ✅ **Simplified Identity Model** - Clean, maintainable authentication
+- ✅ **Clean UI/UX** - Admin-only features hidden from Staff (not disabled)
+- ✅ **API Authorization** - All API endpoints require Staff/Admin authentication
+
+---
+
 ## ✨ Complete Web Application Features
 
 ### 🏠 Home Page
@@ -73,26 +85,28 @@ Staff:  staff@inventory.com / staff123
 - **Sort Options** - Sort by name, price, or stock level
 - **Inline Actions** - Edit, Stock buttons (Delete button hidden for Staff)
 
-### 📊 Inventory Management
-- **Transaction History** - Complete audit trail of all stock changes
-- **Stock Adjustments** - Manual inventory increases/decreases
-- **Reason Tracking** - Document why inventory changes occurred
-- **Real-time Updates** - Automatic inventory updates on orders
-- **Direct Links** - Quick access from product list to stock adjustment
+### 🏷️ Category Management (Admin Only)
+- **View Categories** - List of all product categories with product counts
+- **Create Categories** - Add new product categories
+- **Edit Categories** - Update existing category information
+- **Delete Categories** - Admin-only category deletion (with protection)
+- **Product Organization** - Organize products by categories
+- **Delete Protection** - Cannot delete categories with associated products
+- **Admin-Only Access** - Complete web interface restricted to administrators
 
-### 🛒 Order Management
-- **View Orders** - Paginated list of all orders
-- **Order Details** - Complete order information with items
-- **API Integration** - Create orders via RESTful API
-- **Automatic Processing** - Inventory automatically updated on order creation
-- **Stock Validation** - Prevents orders when insufficient stock
+### 📊 Inventory Management
+- **View Inventory** - Real-time stock levels for all products
+- **Stock Adjustments** - Add or reduce stock quantities
+- **Low Stock Alerts** - Identify products with low inventory
+- **Simple Interface** - Easy-to-use stock management
 
 ### 🌐 API Endpoints
-- **Products API** - Complete CRUD operations
-- **Orders API** - Order creation and retrieval
-- **Categories API** - Category management
-- **Inventory API** - Stock adjustments and transaction history
+- **Authentication API** - Login/logout and user information
+- **Products API** - Complete CRUD operations for products
+- **Inventory API** - Stock management and low stock alerts
+- **Categories API** - Admin-only category management
 - **Swagger Documentation** - Interactive API testing interface
+- **Clean API Structure** - No duplicate endpoints in Swagger
 
 ---
 
@@ -169,27 +183,22 @@ Staff: staff@inventory.com / staff123
 6. **Create:** Click "Add New Product" to add a new product
 7. **Edit:** Click "Edit" button in any product row
 8. **Delete:** Click "Delete" button (Admin only - Staff sees disabled button)
-9. **Adjust Stock:** Click "Stock" button to adjust inventory
 
-### 3. Inventory Management
-1. Click "Management" → "Inventory" in the navigation
-2. **View Transactions:** See complete history of all stock changes
-3. **Adjust Stock:** Click "Adjust" button for any product
-4. **Enter Details:** Specify quantity change and reason
-5. **Save Changes:** Click "Save" to record the adjustment
 
-### 4. Order Management
-1. Click "Management" → "Orders" in the navigation
-2. **View Orders:** See all orders in the system
-3. **Order Details:** Click on any order to see detailed information
-4. **Create Orders:** Use the API endpoints to create new orders
+### 4. Category Management
+1. Click "Management" → "Categories" in the navigation
+2. **View Categories:** See all product categories
+3. **Create Categories:** Add new categories for organizing products
+4. **Edit Categories:** Update existing category information
 
 ### 5. API Testing with Swagger
-1. Navigate to `https://localhost:5001/swagger`
-2. **Explore APIs:** Browse all available endpoints
-3. **Test Endpoints:** Click "Try it out" to test any API
-4. **View Responses:** See actual data returned by the API
-5. **Test Authentication:** Use the API with proper authentication
+1. **Access Swagger:** Go to `http://localhost:5000/swagger`
+2. **Test Authentication API:** Use the `/api/auth/login` endpoint with your credentials:
+   - Email: `admin@inventory.com` or `staff@inventory.com`
+   - Password: `admin123` or `staff123`
+3. **Test Other Endpoints:** Use `/api/auth/me` to get current user info
+4. **View Responses:** See JSON responses from the authentication API
+5. **Note:** All product/order/inventory management is done through the web interface, not APIs
 
 ---
 
@@ -215,10 +224,11 @@ The testing documentation is organized into three main documents:
 
 #### 📋 Document 3: All Test Cases
 **File:** `Testing/All_Test_Cases.md`
-- 30 comprehensive test cases
+- 36 comprehensive test cases
 - Standard test case format
 - Complete coverage of all website functionality
 - Test execution results tracking
+- Updated to reflect all current features
 
 ### 10-Step Testing Process
 
@@ -259,80 +269,66 @@ The testing documentation is organized into three main documents:
    ```
 
 2. **Verify Setup:**
-   - Navigate to `https://localhost:5001`
+   - Navigate to `http://localhost:5000`
    - Login with admin credentials
-   - Check that 5 products and 6 categories are visible
+   - Check that products and categories are visible
+   - Verify role-based access works
 
 3. **Execute Test Cases:**
    - Open `Testing/All_Test_Cases.md`
    - Follow each test case step-by-step
    - Record results in the provided table
    - Test both MVC UI and API endpoints
+   - Test both Admin and Staff user roles
 
 ## 🌐 API Endpoints
 
+> **🔐 Authorization Required:** All API endpoints require Staff or Admin authentication. 
+> 
+> **How to Authenticate:**
+> 1. **Option 1:** Use the `/api/auth/login` endpoint in Swagger with your credentials
+> 2. **Option 2:** Login at `http://localhost:5000/Account/Login` then access Swagger
+> 3. Lock icons (🔒) indicate authentication is required
+> 4. Without login, all API calls will return 401 Unauthorized
+
+### Authentication API
+```http
+POST   /api/auth/login                   # Login with email/username and password
+POST   /api/auth/logout                  # Logout current user  
+GET    /api/auth/me                      # Get current user information
+```
+
 ### Products API
 ```http
-GET    /api/products                      # Get paginated products
-GET    /api/products?search=laptop        # Search products
-GET    /api/products?categoryId=1         # Filter by category
-GET    /api/products?sort=price_desc      # Sort products
-GET    /api/products/{id}                 # Get product by ID
-POST   /api/products                      # Create product
-PUT    /api/products/{id}                 # Update product
-DELETE /api/products/{id}                 # Delete product
-```
-
-### Orders API
-```http
-GET    /api/orders                        # Get paginated orders
-GET    /api/orders/{id}                   # Get order by ID
-POST   /api/orders                        # Create order (reduces inventory)
-```
-
-### Categories API
-```http
-GET    /api/categories                    # Get all categories
-GET    /api/categories/{id}               # Get category by ID
-POST   /api/categories                    # Create category
+GET    /api/products                      # Get paginated products (Staff/Admin)
+GET    /api/products?search=laptop        # Search products (Staff/Admin)
+GET    /api/products?categoryId=1         # Filter by category (Staff/Admin)
+GET    /api/products?sort=price_desc      # Sort products (Staff/Admin)
+GET    /api/products/{id}                 # Get product by ID (Staff/Admin)
+POST   /api/products                      # Create product (Staff/Admin)
+PUT    /api/products/{id}                 # Update product (Staff/Admin)
+DELETE /api/products/{id}                 # Delete product (Admin only)
 ```
 
 ### Inventory API
 ```http
-GET    /api/inventory/transactions        # Get transactions
-GET    /api/inventory/transactions?productId=1  # Filter by product
-POST   /api/inventory/adjust              # Manual inventory adjustment
+GET    /api/inventory/products            # Get products with stock levels (Staff/Admin)
+GET    /api/inventory/products/{id}       # Get product stock info (Staff/Admin)
+POST   /api/inventory/products/{id}/adjust # Adjust product stock (Staff/Admin)
+GET    /api/inventory/low-stock           # Get low stock products (Staff/Admin)
 ```
 
-### Example API Requests
-
-**Create a Product:**
-```json
-POST /api/products
-Content-Type: application/json
-
-{
-  "SKU": "TEST-001",
-  "Name": "Test Product",
-  "Description": "A test product for validation",
-  "Price": 99.99,
-  "QuantityInStock": 50,
-  "CategoryId": 1
-}
+### Categories API (Admin Only)
+```http
+GET    /api/categories                    # Get all categories (Admin only)
+GET    /api/categories/{id}               # Get category by ID (Admin only)
+POST   /api/categories                    # Create category (Admin only)
+PUT    /api/categories/{id}               # Update category (Admin only)
+DELETE /api/categories/{id}               # Delete category (Admin only)
 ```
 
-**Create an Order:**
-```json
-POST /api/orders
-Content-Type: application/json
+> **🔐 Admin Only:** All category management endpoints require Admin role. Non-admin users will receive 403 Forbidden with message "Only administrators can access this resource."
 
-{
-  "Items": [
-    { "ProductId": 1, "Quantity": 2 },
-    { "ProductId": 2, "Quantity": 1 }
-  ]
-}
-```
 
 ---
 
@@ -372,31 +368,7 @@ Products
 ├── Price
 ├── QuantityInStock
 ├── CategoryId (FK, Index)
-├── Category (Navigation)
-└── InventoryTransactions (Navigation)
-
-Orders
-├── Id (PK)
-├── CreatedAt (Index)
-├── Total
-└── Items (Navigation)
-
-OrderItems
-├── Id (PK)
-├── OrderId (FK, Index)
-├── ProductId (FK, Index)
-├── Quantity
-├── UnitPrice
-├── Order (Navigation)
-└── Product (Navigation)
-
-InventoryTransactions
-├── Id (PK)
-├── ProductId (FK, Index)
-├── QuantityChange
-├── Timestamp (Index)
-├── Reason
-└── Product (Navigation)
+└── Category (Navigation)
 ```
 
 ---
@@ -414,7 +386,6 @@ The application automatically seeds the database with:
   - T-Shirt (Clothing) - $19.99
   - Programming Guide (Books) - $39.99
   - Coffee Maker (Home & Garden) - $79.99
-- **Initial Inventory Transactions:** One per product with reason "Initial Stock"
 
 ---
 

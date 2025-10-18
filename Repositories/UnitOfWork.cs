@@ -10,19 +10,13 @@ public class UnitOfWork : IUnitOfWork
     private IDbContextTransaction? _transaction;
 
     public IProductRepository Products { get; }
-    public IOrderRepository Orders { get; }
     public IRepository<Category> Categories { get; }
-    public IRepository<InventoryTransaction> InventoryTransactions { get; }
-    public IRepository<OrderItem> OrderItems { get; }
 
     public UnitOfWork(ApplicationDbContext context)
     {
         _context = context;
         Products = new ProductRepository(_context);
-        Orders = new OrderRepository(_context);
         Categories = new Repository<Category>(_context);
-        InventoryTransactions = new Repository<InventoryTransaction>(_context);
-        OrderItems = new Repository<OrderItem>(_context);
     }
 
     public async Task<int> SaveChangesAsync()

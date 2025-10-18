@@ -65,10 +65,10 @@
 **Test Categories:**
 - **Authentication Tests:** Login, logout, role-based access
 - **Product Management Tests:** CRUD operations, search, filtering
-- **Inventory Tests:** Stock adjustments, transaction tracking
-- **Order Tests:** Order creation, processing, validation
-- **API Tests:** Endpoint functionality, response validation
-- **Integration Tests:** Cross-module functionality
+- **Inventory Tests:** Stock adjustments, stock level management
+- **Category Management Tests:** Admin-only CRUD operations
+- **API Tests:** Endpoint functionality, response validation, authorization
+- **Integration Tests:** Cross-module functionality, role-based access
 
 **Activities:**
 - Create detailed test cases
@@ -83,7 +83,7 @@
 **Purpose:** Set up a stable, consistent environment for testing.
 
 **Environment Requirements:**
-- Application running on localhost:5001
+- Application running on localhost:5000
 - Database properly migrated and seeded
 - All dependencies installed
 - Browser compatibility verified
@@ -100,6 +100,7 @@
 - [ ] All URLs are accessible
 - [ ] Login functionality works
 - [ ] API endpoints respond correctly
+- [ ] Role-based access works properly
 
 ---
 
@@ -108,10 +109,10 @@
 **Purpose:** Ensure consistent, reliable data for testing scenarios.
 
 **Data Requirements:**
-- 5 sample products across different categories
-- 6 product categories
-- 2 user accounts (Admin and Staff)
-- Initial inventory transactions
+- Sample products across different categories
+- Product categories for organization
+- 2 user accounts (Admin and Staff) with different permissions
+- Initial inventory data
 
 **Activities:**
 - Verify seed data is loaded
@@ -120,10 +121,11 @@
 - Document data setup procedures
 
 **Data Verification:**
-- [ ] 5 products visible in product list
-- [ ] 6 categories available in dropdowns
+- [ ] Products visible in product list
+- [ ] Categories available in dropdowns
 - [ ] Admin and Staff accounts can login
-- [ ] Inventory transactions are recorded
+- [ ] Inventory data is properly loaded
+- [ ] Role-based access is working
 
 ---
 
@@ -172,6 +174,7 @@
 - Data is saved and retrieved properly
 - API responses match specifications
 - Error handling works as expected
+- Role-based access control works
 - Performance meets requirements
 
 ---
@@ -269,6 +272,7 @@
 - **System Reliability:** Consistency of functionality
 - **Integration Quality:** BE/FE interaction smoothness
 - **Documentation Quality:** Completeness and clarity
+- **Security:** Role-based access control effectiveness
 
 ---
 
@@ -276,7 +280,7 @@
 
 1. **Test Objectives Document**
 2. **Role Assignment Matrix**
-3. **Comprehensive Test Cases**
+3. **Comprehensive Test Cases (36 test cases)**
 4. **Environment Setup Guide**
 5. **Test Data Documentation**
 6. **Test Execution Results**

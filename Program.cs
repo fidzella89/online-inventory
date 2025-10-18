@@ -5,6 +5,7 @@ using OnlineInventory.Data;
 using OnlineInventory.Models;
 using OnlineInventory.Repositories;
 using OnlineInventory.Services;
+using Swashbuckle.AspNetCore.SwaggerUI;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -65,12 +66,9 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
-builder.Services.AddScoped<IOrderRepository, OrderRepository>();
 
 // Register services
 builder.Services.AddScoped<IProductService, ProductService>();
-builder.Services.AddScoped<IOrderService, OrderService>();
-builder.Services.AddScoped<IInventoryService, InventoryService>();
 builder.Services.AddScoped<ICategoryService, CategoryService>();
 
 // Add memory cache
@@ -84,7 +82,7 @@ builder.Services.AddSwaggerGen(c =>
     {
         Title = "Online Inventory Management API",
         Version = "v1",
-        Description = "A comprehensive API for managing products, inventory, orders, and categories",
+        Description = "A comprehensive API for managing products, inventory, orders, and categories. **All endpoints require Staff or Admin authentication.** Please login at /Account/Login first, then refresh this page.",
         Contact = new OpenApiContact
         {
             Name = "IT-ELASI Project",
@@ -92,14 +90,12 @@ builder.Services.AddSwaggerGen(c =>
         }
     });
 
-    // Add authorization button in Swagger UI (for future auth implementation)
-    c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+    // Add cookie-based authentication for Swagger UI
+    c.AddSecurityDefinition("CookieAuth", new OpenApiSecurityScheme
     {
-        Description = "JWT Authorization header using the Bearer scheme. Example: \"Bearer {token}\"",
-        Name = "Authorization",
-        In = ParameterLocation.Header,
-        Type = SecuritySchemeType.ApiKey,
-        Scheme = "Bearer"
+        Type = SecuritySchemeType.Http,
+        Scheme = "cookie",
+        Description = "ASP.NET Core Identity Cookie Authentication. Use the /api/auth/login endpoint to authenticate, then all other endpoints will work automatically."
     });
 
     c.AddSecurityRequirement(new OpenApiSecurityRequirement
@@ -110,7 +106,7 @@ builder.Services.AddSwaggerGen(c =>
                 Reference = new OpenApiReference
                 {
                     Type = ReferenceType.SecurityScheme,
-                    Id = "Bearer"
+                    Id = "CookieAuth"
                 }
             },
             Array.Empty<string>()
@@ -178,6 +174,12 @@ if (app.Environment.IsDevelopment())
         c.RoutePrefix = "swagger"; // Access at /swagger
         c.DocumentTitle = "Online Inventory Management API";
         c.DisplayRequestDuration();
+        c.EnableDeepLinking();
+        c.EnableFilter();
+        c.ShowExtensions();
+        c.EnableValidator();
+        c.SupportedSubmitMethods(new[] { SubmitMethod.Get, SubmitMethod.Post, SubmitMethod.Put, SubmitMethod.Delete });
+        c.EnableTryItOutByDefault();
     });
 }
 else

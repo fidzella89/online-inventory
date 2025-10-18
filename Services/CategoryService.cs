@@ -62,5 +62,44 @@ public class CategoryService : ICategoryService
             ProductCount = 0
         };
     }
+
+    public async Task<CategoryDto?> UpdateCategoryAsync(int id, UpdateCategoryDto dto)
+    {
+        var category = await _unitOfWork.Categories.GetByIdAsync(id);
+        if (category == null)
+        {
+            return null;
+        }
+
+        category.Name = dto.Name;
+        _unitOfWork.Categories.Update(category);
+        await _unitOfWork.SaveChangesAsync();
+
+        return new CategoryDto
+        {
+            Id = category.Id,
+            Name = category.Name,
+            ProductCount = category.Products.Count
+        };
+    }
+
+    public async Task<bool> DeleteCategoryAsync(int id)
+    {
+        var category = await _unitOfWork.Categories.GetByIdAsync(id);
+        if (category == null)
+        {
+            return false;
+        }
+
+        // Check if category has products
+        if (category.Products.Any())
+        {
+            return false; // Cannot delete category with products
+        }
+
+        _unitOfWork.Categories.Remove(category);
+        await _unitOfWork.SaveChangesAsync();
+        return true;
+    }
 }
 

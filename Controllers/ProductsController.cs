@@ -8,13 +8,14 @@ using OnlineInventory.ViewModels;
 namespace OnlineInventory.Controllers;
 
 [Authorize(Roles = "Admin,Staff")]
-[Route("Admin/Products")]
-public class AdminProductsController : Controller
+[ApiExplorerSettings(IgnoreApi = true)]
+[Route("Products")]
+public class ProductsController : Controller
 {
     private readonly IProductService _productService;
     private readonly ICategoryService _categoryService;
 
-    public AdminProductsController(IProductService productService, ICategoryService categoryService)
+    public ProductsController(IProductService productService, ICategoryService categoryService)
     {
         _productService = productService;
         _categoryService = categoryService;
