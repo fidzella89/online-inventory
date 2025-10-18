@@ -30,7 +30,7 @@ public static class SeedUsers
                 LockoutEnabled = true // Maps to IsActive column
             };
 
-            var result = await userManager.CreateAsync(adminUser, "Admin@123");
+            var result = await userManager.CreateAsync(adminUser, "admin123");
             if (result.Succeeded)
             {
                 await userManager.AddToRoleAsync(adminUser, "Admin");
@@ -49,7 +49,7 @@ public static class SeedUsers
                 LockoutEnabled = true // Maps to IsActive column
             };
 
-            var result = await userManager.CreateAsync(staffUser, "Staff@123");
+            var result = await userManager.CreateAsync(staffUser, "staff123");
             if (result.Succeeded)
             {
                 await userManager.AddToRoleAsync(staffUser, "Staff");

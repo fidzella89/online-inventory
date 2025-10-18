@@ -15,5 +15,6 @@ public interface IProductRepository : IRepository<Product>
     Task<ProductDto?> GetProductDtoByIdAsync(int id);
     Task<Product?> GetBySkuAsync(string sku);
     Task<bool> SkuExistsAsync(string sku, int? excludeId = null);
+    Task<List<string>> GetSkusByCategoryPrefixAsync(string categoryPrefix);
 }
 

@@ -18,20 +18,28 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     public DbSet<OrderItem> OrderItems => Set<OrderItem>();
     public DbSet<InventoryTransaction> InventoryTransactions => Set<InventoryTransaction>();
 
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    {
+        base.OnConfiguring(optionsBuilder);
+        
+        // Suppress the warning about pending model changes
+        optionsBuilder.ConfigureWarnings(warnings => 
+            warnings.Ignore(Microsoft.EntityFrameworkCore.Diagnostics.RelationalEventId.PendingModelChangesWarning));
+    }
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
 
-        // Customize Identity table names
-        modelBuilder.Entity<ApplicationUser>().ToTable("Users");
-        modelBuilder.Entity<IdentityRole>().ToTable("Roles");
-        modelBuilder.Entity<IdentityUserRole<string>>().ToTable("UserRoles");
-        modelBuilder.Entity<IdentityUserClaim<string>>().ToTable("UserClaims");
-        modelBuilder.Entity<IdentityRoleClaim<string>>().ToTable("RoleClaims");
+        // Ignore unnecessary Identity entities first
+        modelBuilder.Ignore<IdentityUserLogin<string>>();
+        modelBuilder.Ignore<IdentityUserToken<string>>();
 
-        // Customize ApplicationUser properties
+        // Customize Identity table names
         modelBuilder.Entity<ApplicationUser>(entity =>
         {
+            entity.ToTable("Users");
+            
             // Remove unnecessary columns
             entity.Ignore(e => e.ConcurrencyStamp);
             entity.Ignore(e => e.EmailConfirmed);
@@ -45,30 +53,27 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
             entity.Property(e => e.PasswordHash).HasColumnName("Password");
         });
 
-        // Simplify other Identity tables
         modelBuilder.Entity<IdentityRole>(entity =>
         {
-            // Remove unnecessary columns from Roles
+            entity.ToTable("Roles");
             entity.Ignore(e => e.ConcurrencyStamp);
         });
 
+        modelBuilder.Entity<IdentityUserRole<string>>().ToTable("UserRoles");
+        
         modelBuilder.Entity<IdentityUserClaim<string>>(entity =>
         {
-            // Keep only essential fields for UserClaims
+            entity.ToTable("UserClaims");
             entity.Property(e => e.ClaimType).HasMaxLength(256);
             entity.Property(e => e.ClaimValue).HasMaxLength(256);
         });
 
         modelBuilder.Entity<IdentityRoleClaim<string>>(entity =>
         {
-            // Keep only essential fields for RoleClaims
+            entity.ToTable("RoleClaims");
             entity.Property(e => e.ClaimType).HasMaxLength(256);
             entity.Property(e => e.ClaimValue).HasMaxLength(256);
         });
-
-        // Remove UserLogins and UserTokens tables entirely (not needed for simple auth)
-        modelBuilder.Ignore<IdentityUserLogin<string>>();
-        modelBuilder.Ignore<IdentityUserToken<string>>();
 
         // Product configuration
         modelBuilder.Entity<Product>(entity =>

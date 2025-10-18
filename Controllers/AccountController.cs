@@ -23,6 +23,12 @@ public class AccountController : Controller
     [AllowAnonymous]
     public IActionResult Login(string? returnUrl = null)
     {
+        // If user is already logged in, redirect to home page
+        if (User.Identity?.IsAuthenticated == true)
+        {
+            return RedirectToAction("Index", "Home");
+        }
+        
         ViewData["ReturnUrl"] = returnUrl;
         return View();
     }
@@ -36,24 +42,31 @@ public class AccountController : Controller
         
         if (ModelState.IsValid)
         {
-            var result = await _signInManager.PasswordSignInAsync(
-                model.Email, 
-                model.Password, 
-                model.RememberMe, 
-                lockoutOnFailure: true);
+            // Try to find user by email or username
+            var user = await _userManager.FindByEmailAsync(model.Email) ?? 
+                      await _userManager.FindByNameAsync(model.Email);
 
-            if (result.Succeeded)
+            if (user != null)
             {
-                if (!string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl))
+                var result = await _signInManager.PasswordSignInAsync(
+                    user.UserName!, 
+                    model.Password, 
+                    model.RememberMe, 
+                    lockoutOnFailure: true);
+
+                if (result.Succeeded)
                 {
-                    return Redirect(returnUrl);
+                    if (!string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl))
+                    {
+                        return Redirect(returnUrl);
+                    }
+                    return RedirectToAction("Index", "Home");
                 }
-                return RedirectToAction("Index", "Home");
-            }
-            if (result.IsLockedOut)
-            {
-                ModelState.AddModelError(string.Empty, "Account locked due to multiple failed attempts. Try again later.");
-                return View(model);
+                if (result.IsLockedOut)
+                {
+                    ModelState.AddModelError(string.Empty, "Account locked due to multiple failed attempts. Try again later.");
+                    return View(model);
+                }
             }
             
             ModelState.AddModelError(string.Empty, "Invalid login attempt.");

@@ -30,12 +30,6 @@ public class ProductService : IProductService
 
     public async Task<ProductDto> CreateProductAsync(CreateProductDto dto)
     {
-        // Validate SKU uniqueness
-        if (await _unitOfWork.Products.SkuExistsAsync(dto.SKU))
-        {
-            throw new InvalidOperationException($"Product with SKU '{dto.SKU}' already exists.");
-        }
-
         // Validate category exists
         var category = await _unitOfWork.Categories.GetByIdAsync(dto.CategoryId);
         if (category == null)
@@ -43,9 +37,12 @@ public class ProductService : IProductService
             throw new InvalidOperationException($"Category with ID {dto.CategoryId} not found.");
         }
 
+        // Auto-generate SKU based on category
+        var sku = await GenerateSkuAsync(category.Name);
+
         var product = new Product
         {
-            SKU = dto.SKU,
+            SKU = sku,
             Name = dto.Name,
             Description = dto.Description,
             Price = dto.Price,
@@ -55,20 +52,22 @@ public class ProductService : IProductService
 
         await _unitOfWork.Products.AddAsync(product);
         
+        // Save the product first to get the generated ID
+        await _unitOfWork.SaveChangesAsync();
+        
         // Create initial inventory transaction if stock > 0
         if (dto.QuantityInStock > 0)
         {
             var transaction = new InventoryTransaction
             {
-                ProductId = product.Id,
+                ProductId = product.Id, // Now product.Id has a valid value
                 QuantityChange = dto.QuantityInStock,
                 Timestamp = DateTime.UtcNow,
                 Reason = "Initial Stock"
             };
             await _unitOfWork.InventoryTransactions.AddAsync(transaction);
+            await _unitOfWork.SaveChangesAsync();
         }
-        
-        await _unitOfWork.SaveChangesAsync();
 
         return (await _unitOfWork.Products.GetProductDtoByIdAsync(product.Id))!;
     }
@@ -111,6 +110,38 @@ public class ProductService : IProductService
         await _unitOfWork.SaveChangesAsync();
 
         return true;
+    }
+
+    private async Task<string> GenerateSkuAsync(string categoryName)
+    {
+        // Get category prefix (first 4 characters, uppercase)
+        var categoryPrefix = categoryName.Length >= 4 
+            ? categoryName.Substring(0, 4).ToUpper() 
+            : categoryName.ToUpper().PadRight(4, 'X');
+
+        // Get the next number for this category
+        var existingSkus = await _unitOfWork.Products.GetSkusByCategoryPrefixAsync(categoryPrefix);
+        
+        int nextNumber = 1;
+        if (existingSkus.Any())
+        {
+            // Extract numbers from existing SKUs and find the next one
+            var numbers = existingSkus
+                .Where(sku => sku.StartsWith(categoryPrefix + "-"))
+                .Select(sku => 
+                {
+                    var parts = sku.Split('-');
+                    if (parts.Length > 1 && int.TryParse(parts[1], out int num))
+                        return num;
+                    return 0;
+                })
+                .Where(num => num > 0)
+                .ToList();
+
+            nextNumber = numbers.Any() ? numbers.Max() + 1 : 1;
+        }
+
+        return $"{categoryPrefix}-{nextNumber:D3}";
     }
 }
 

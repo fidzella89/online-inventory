@@ -21,8 +21,8 @@
                         <div class="mb-3">
                             <label asp-for="Email" class="form-label"></label>
                             <div class="input-group">
-                                <span class="input-group-text"><i class="bi bi-envelope"></i></span>
-                                <input asp-for="Email" class="form-control" placeholder="Enter your email" />
+                                <span class="input-group-text"><i class="bi bi-person"></i></span>
+                                <input asp-for="Email" class="form-control" placeholder="Enter your email or username" />
                             </div>
                             <span asp-validation-for="Email" class="text-danger"></span>
                         </div>
@@ -31,7 +31,10 @@
                             <label asp-for="Password" class="form-label"></label>
                             <div class="input-group">
                                 <span class="input-group-text"><i class="bi bi-key"></i></span>
-                                <input asp-for="Password" class="form-control" placeholder="Enter your password" />
+                                <input asp-for="Password" class="form-control" placeholder="Enter your password" id="passwordInput" type="password" />
+                                <button class="btn btn-outline-secondary" type="button" id="togglePassword">
+                                    <i class="bi bi-eye" id="toggleIcon"></i>
+                                </button>
                             </div>
                             <span asp-validation-for="Password" class="text-danger"></span>
                         </div>
@@ -53,10 +56,10 @@
                     <div class="alert alert-info">
                         <h6 class="alert-heading"><i class="bi bi-info-circle"></i> Demo Accounts</h6>
                         <p class="mb-1"><strong>Admin Account:</strong></p>
-                        <small>Email: <code>admin@inventory.com</code> | Password: <code>Admin@123</code></small>
+                        <small>Email: <code>admin@inventory.com</code> | Password: <code>admin123</code></small>
                         
                         <p class="mb-1 mt-2"><strong>Staff Account:</strong></p>
-                        <small>Email: <code>staff@inventory.com</code> | Password: <code>Staff@123</code></small>
+                        <small>Email: <code>staff@inventory.com</code> | Password: <code>staff123</code></small>
                     </div>
                 </div>
             </div>
@@ -66,5 +69,26 @@
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const togglePassword = document.getElementById('togglePassword');
+            const passwordInput = document.getElementById('passwordInput');
+            const toggleIcon = document.getElementById('toggleIcon');
+            
+            togglePassword.addEventListener('click', function() {
+                // Toggle password visibility
+                if (passwordInput.type === 'password') {
+                    passwordInput.type = 'text';
+                    toggleIcon.classList.remove('bi-eye');
+                    toggleIcon.classList.add('bi-eye-slash');
+                } else {
+                    passwordInput.type = 'password';
+                    toggleIcon.classList.remove('bi-eye-slash');
+                    toggleIcon.classList.add('bi-eye');
+                }
+            });
+        });
+    </script>
 }
 

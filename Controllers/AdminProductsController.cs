@@ -67,7 +67,6 @@ public class AdminProductsController : Controller
             {
                 var dto = new CreateProductDto
                 {
-                    SKU = model.SKU,
                     Name = model.Name,
                     Description = model.Description,
                     Price = model.Price,
@@ -82,6 +81,10 @@ public class AdminProductsController : Controller
             catch (InvalidOperationException ex)
             {
                 ModelState.AddModelError("", ex.Message);
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError("", $"An error occurred: {ex.Message}");
             }
         }
 
