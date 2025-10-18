@@ -13,13 +13,10 @@
                 <div class="card-body">
                     <form asp-action="Create" method="post">
                         @Html.AntiForgeryToken()
-                        <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
-
-                        <div class="mb-3">
-                            <label asp-for="SKU" class="form-label"></label>
-                            <input asp-for="SKU" class="form-control" />
-                            <span asp-validation-for="SKU" class="text-danger"></span>
-                        </div>
+                        @if (!ViewData.ModelState.IsValid)
+                        {
+                            <div asp-validation-summary="All" class="alert alert-danger"></div>
+                        }
 
                         <div class="mb-3">
                             <label asp-for="Name" class="form-label"></label>

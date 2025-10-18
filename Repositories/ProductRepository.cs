@@ -107,5 +107,14 @@ public class ProductRepository : Repository<Product>, IProductRepository
         
         return await query.AnyAsync();
     }
+
+    public async Task<List<string>> GetSkusByCategoryPrefixAsync(string categoryPrefix)
+    {
+        return await _context.Products
+            .AsNoTracking()
+            .Where(p => p.SKU.StartsWith(categoryPrefix))
+            .Select(p => p.SKU)
+            .ToListAsync();
+    }
 }
 

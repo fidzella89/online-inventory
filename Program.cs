@@ -14,11 +14,11 @@ builder.Services.AddControllersWithViews();
 // Add Identity with custom configuration
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
 {
-    // Password settings
+    // Password settings - simplified for development/demo
     options.Password.RequireDigit = true;
     options.Password.RequireLowercase = true;
-    options.Password.RequireUppercase = true;
-    options.Password.RequireNonAlphanumeric = true;
+    options.Password.RequireUppercase = false; // Allow simple passwords
+    options.Password.RequireNonAlphanumeric = false; // Allow simple passwords
     options.Password.RequiredLength = 6;
 
     // Lockout settings
@@ -147,8 +147,8 @@ using (var scope = app.Services.CreateScope())
     {
         var context = services.GetRequiredService<ApplicationDbContext>();
         
-        // Apply migrations
-        context.Database.Migrate();
+        // Ensure database is created
+        context.Database.EnsureCreated();
         
         // Seed data
         await DbSeeder.SeedAsync(context);

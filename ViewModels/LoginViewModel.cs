@@ -5,8 +5,7 @@ namespace OnlineInventory.ViewModels;
 public class LoginViewModel
 {
     [Required]
-    [EmailAddress]
-    [Display(Name = "Email")]
+    [Display(Name = "Email/Username")]
     public string Email { get; set; } = string.Empty;
 
     [Required]

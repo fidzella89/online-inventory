@@ -6,7 +6,6 @@ public class ProductViewModel
 {
     public int Id { get; set; }
     
-    [Required]
     [Display(Name = "SKU")]
     public string SKU { get; set; } = string.Empty;
     
@@ -20,7 +19,6 @@ public class ProductViewModel
     [Required]
     [Range(0.01, double.MaxValue, ErrorMessage = "Price must be greater than 0")]
     [Display(Name = "Price")]
-    [DataType(DataType.Currency)]
     public decimal Price { get; set; }
     
     [Required]
