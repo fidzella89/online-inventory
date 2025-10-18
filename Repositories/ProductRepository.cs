@@ -18,7 +18,7 @@ public class ProductRepository : Repository<Product>, IProductRepository
         int? categoryId = null, 
         string? sortBy = null)
     {
-        var query = _context.Products.AsNoTracking();
+        var query = _context.Products.AsNoTracking().Where(p => !p.IsDeleted);
 
         // Apply filters
         if (!string.IsNullOrWhiteSpace(search))
@@ -75,7 +75,7 @@ public class ProductRepository : Repository<Product>, IProductRepository
     {
         return await _context.Products
             .AsNoTracking()
-            .Where(p => p.Id == id)
+            .Where(p => p.Id == id && !p.IsDeleted)
             .Select(p => new ProductDto
             {
                 Id = p.Id,

@@ -63,8 +63,8 @@
                                                     </a>
                                                     @if (category.ProductCount == 0)
                                                     {
-                                                        <button type="button" class="btn btn-sm btn-outline-danger" 
-                                                                data-bs-toggle="modal" data-bs-target="#deleteModal-@category.Id" title="Delete Category">
+                                                <button type="button" class="btn btn-sm btn-outline-danger" 
+                                                        data-bs-toggle="modal" data-bs-target="#deleteModal-@category.Id" title="Soft Delete Category">
                                                             <i class="bi bi-trash"></i>
                                                         </button>
                                                     }
@@ -86,8 +86,8 @@
                                                                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                                                             </div>
                                                             <div class="modal-body">
-                                                                <p>Are you sure you want to delete the category <strong>"@category.Name"</strong>?</p>
-                                                                <p class="text-muted small">This action cannot be undone.</p>
+                                                                <p>Are you sure you want to soft delete the category <strong>"@category.Name"</strong>?</p>
+                                                                <p class="text-muted small">This will hide the category from the list but keep it in the database. It can be restored later if needed.</p>
                                                             </div>
                                                             <div class="modal-footer">
                                                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>

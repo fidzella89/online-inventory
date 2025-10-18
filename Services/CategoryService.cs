@@ -21,11 +21,12 @@ public class CategoryService : ICategoryService
     {
         return await _context.Categories
             .AsNoTracking()
+            .Where(c => !c.IsDeleted)
             .Select(c => new CategoryDto
             {
                 Id = c.Id,
                 Name = c.Name,
-                ProductCount = c.Products.Count
+                ProductCount = c.Products.Count(p => !p.IsDeleted)
             })
             .OrderBy(c => c.Name)
             .ToListAsync();
@@ -35,12 +36,12 @@ public class CategoryService : ICategoryService
     {
         return await _context.Categories
             .AsNoTracking()
-            .Where(c => c.Id == id)
+            .Where(c => c.Id == id && !c.IsDeleted)
             .Select(c => new CategoryDto
             {
                 Id = c.Id,
                 Name = c.Name,
-                ProductCount = c.Products.Count
+                ProductCount = c.Products.Count(p => !p.IsDeleted)
             })
             .FirstOrDefaultAsync();
     }
@@ -66,7 +67,7 @@ public class CategoryService : ICategoryService
     public async Task<CategoryDto?> UpdateCategoryAsync(int id, UpdateCategoryDto dto)
     {
         var category = await _unitOfWork.Categories.GetByIdAsync(id);
-        if (category == null)
+        if (category == null || category.IsDeleted)
         {
             return null;
         }
@@ -79,25 +80,26 @@ public class CategoryService : ICategoryService
         {
             Id = category.Id,
             Name = category.Name,
-            ProductCount = category.Products.Count
+            ProductCount = category.Products.Count(p => !p.IsDeleted)
         };
     }
 
     public async Task<bool> DeleteCategoryAsync(int id)
     {
         var category = await _unitOfWork.Categories.GetByIdAsync(id);
-        if (category == null)
+        if (category == null || category.IsDeleted)
         {
             return false;
         }
 
-        // Check if category has products
-        if (category.Products.Any())
+        // Check if category has active products
+        if (category.Products.Any(p => !p.IsDeleted))
         {
-            return false; // Cannot delete category with products
+            return false; // Cannot delete category with active products
         }
 
-        _unitOfWork.Categories.Remove(category);
+        category.IsDeleted = true;
+        _unitOfWork.Categories.Update(category);
         await _unitOfWork.SaveChangesAsync();
         return true;
     }

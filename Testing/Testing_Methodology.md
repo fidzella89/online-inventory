@@ -30,6 +30,77 @@
 - What constitutes a successful test?
 - What is out of scope for this phase?
 
+**Specific Test Objectives for Online Inventory Management System:**
+
+### Primary Objectives
+1. **Authentication & Authorization Testing**
+   - Verify user login/logout functionality works correctly
+   - Validate role-based access control (Admin vs Staff permissions)
+   - Ensure session management is secure and reliable
+   - Test API authentication and authorization
+
+2. **Product Management Testing**
+   - Verify CRUD operations for products (Create, Read, Update, Delete)
+   - Test search and filtering functionality
+   - Validate sorting capabilities (name, price, stock)
+   - Ensure pagination works correctly
+   - Test SKU auto-generation based on categories
+   - Verify role-based UI elements (delete button visibility)
+
+3. **Inventory Management Testing**
+   - Test stock level viewing and display
+   - Verify stock adjustment functionality
+   - Test low stock alert system
+   - Validate inventory data accuracy
+   - Ensure real-time stock updates
+
+4. **Category Management Testing (Admin Only)**
+   - Test admin-only access to category management
+   - Verify CRUD operations for categories
+   - Test delete protection for categories with products
+   - Validate product count display
+   - Ensure proper error handling for unauthorized access
+
+5. **API Integration Testing**
+   - Test all RESTful API endpoints
+   - Verify proper JSON responses
+   - Test API authentication and authorization
+   - Validate Swagger documentation accuracy
+   - Ensure API error handling works correctly
+
+6. **User Interface Testing**
+   - Test responsive design across different screen sizes
+   - Verify navigation works correctly
+   - Test form validation and error messages
+   - Ensure proper user feedback for all actions
+   - Validate role-based UI element visibility
+
+### Success Criteria
+- **95% Test Pass Rate** - At least 34 out of 36 test cases must pass
+- **Zero Critical Defects** - No functionality-breaking issues
+- **Complete Feature Coverage** - All major features tested
+- **Role-Based Security** - Proper access control verified
+- **API Functionality** - All endpoints working correctly
+- **User Experience** - Smooth, intuitive interface operation
+
+### Testing Boundaries
+**In Scope:**
+- Happy path testing only (normal, expected flows)
+- Core functionality validation
+- Integration between backend and frontend
+- Role-based access control
+- API endpoint functionality
+- Basic error handling
+
+**Out of Scope:**
+- Performance testing
+- Security penetration testing
+- Load testing
+- Browser compatibility testing
+- Mobile app testing
+- Advanced error scenarios
+- Data migration testing
+
 ---
 
 ### Step 2: Assign Roles and Responsibilities

@@ -23,6 +23,8 @@ public class Product
     [Range(0, int.MaxValue)]
     public int QuantityInStock { get; set; }
 
+    public bool IsDeleted { get; set; } = false;
+
     public int CategoryId { get; set; }
     public Category Category { get; set; } = null!;
 

@@ -85,12 +85,14 @@ public class ProductService : IProductService
     public async Task<bool> DeleteProductAsync(int id)
     {
         var product = await _unitOfWork.Products.GetByIdAsync(id);
-        if (product == null)
+        if (product == null || product.IsDeleted)
         {
             return false;
         }
 
-        _unitOfWork.Products.Remove(product);
+        // Soft delete - mark as deleted instead of removing
+        product.IsDeleted = true;
+        _unitOfWork.Products.Update(product);
         await _unitOfWork.SaveChangesAsync();
 
         return true;
