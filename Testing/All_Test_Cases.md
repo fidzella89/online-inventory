@@ -12,42 +12,95 @@
 
 | Test Case ID | Description | Inputs | Steps | Expected Outcome |
 |--------------|-------------|--------|-------|------------------|
-| TC-001 | User login | Valid credentials | 1. Navigate to login page<br>2. Enter username and password<br>3. Click 'Login' | User successfully logged in<br>Dashboard displays |
-| TC-002 | User logout | N/A | 1. Click user dropdown<br>2. Click 'Logout' | User logged out<br>Redirected to home page |
-| TC-003 | View products | N/A | 1. Navigate to /Products<br>2. Observe product list | Product list displays with products<br>Pagination controls visible |
-| TC-004 | Search products | Search term | 1. Enter search term in search box<br>2. Click search or press Enter | Filtered products display<br>Search results match criteria |
-| TC-005 | Filter by category | Category selection | 1. Select category from dropdown<br>2. Observe filtered results | Only products from selected category display |
-| TC-006 | Sort products | Sort option | 1. Select sort option (Name, Price, Stock)<br>2. Observe sorted list | Products sorted according to selected criteria |
-| TC-007 | Create product | Product data | 1. Click 'Add New Product'<br>2. Fill form with valid data<br>3. Click 'Create' | Product created successfully<br>Redirected to product list |
-| TC-008 | Edit product | Updated data | 1. Click 'Edit' button for a product<br>2. Modify product details<br>3. Click 'Save' | Product updated successfully<br>Changes reflected in list |
-| TC-009 | Delete product (Admin) | N/A | 1. Click 'Delete' button for a product<br>2. Confirm deletion | Product deleted successfully<br>Removed from product list |
-| TC-010 | Delete product (Staff) | N/A | 1. Login as Staff<br>2. Navigate to products<br>3. Observe delete button | Delete button is disabled<br>Staff cannot delete products |
-| TC-011 | View inventory | N/A | 1. Navigate to /Inventory<br>2. Observe inventory list | Inventory list displays<br>All products show current stock levels |
-| TC-012 | Adjust inventory | Quantity change | 1. Click 'Adjust' for a product<br>2. Enter quantity change<br>3. Enter reason<br>4. Click 'Save' | Inventory updated successfully<br>Stock level updated |
-| TC-013 | View categories (Admin) | N/A | 1. Login as Admin<br>2. Navigate to /Admin/Categories<br>3. Observe category list | Category list displays<br>All categories with product counts shown |
-| TC-014 | Create category (Admin) | Category data | 1. Click 'Add New Category'<br>2. Enter category name<br>3. Click 'Create' | Category created successfully<br>Redirected to category list |
-| TC-015 | Edit category (Admin) | Updated data | 1. Click 'Edit' button for a category<br>2. Modify category name<br>3. Click 'Update' | Category updated successfully<br>Changes reflected in list |
-| TC-016 | Delete category (Admin) | N/A | 1. Click 'Delete' button for empty category<br>2. Confirm deletion | Category deleted successfully<br>Removed from category list |
-| TC-017 | Delete category with products (Admin) | N/A | 1. Try to delete category with products<br>2. Observe behavior | Delete button disabled<br>Cannot delete category with products |
-| TC-018 | Access categories (Staff) | N/A | 1. Login as Staff<br>2. Try to access /Admin/Categories | Access denied<br>Redirected to unauthorized page |
-| TC-019 | View product API | N/A | 1. Use GET /api/products<br>2. Observe response | All products return<br>Pagination metadata included |
-| TC-020 | Search products via API | Search term | 1. Use GET /api/products?search=term<br>2. Observe filtered results | Filtered products return<br>Search functionality works |
-| TC-021 | Filter products via API | Category ID | 1. Use GET /api/products?categoryId=1<br>2. Observe filtered results | Only products from category return<br>Filter functionality works |
-| TC-022 | Sort products via API | Sort parameter | 1. Use GET /api/products?sort=price_desc<br>2. Observe sorted results | Products sorted correctly<br>Sort functionality works |
-| TC-023 | Get single product via API | Product ID | 1. Use GET /api/products/1<br>2. Observe response | Single product details return<br>All fields populated correctly |
-| TC-024 | Create product via API | Product data | 1. Use POST /api/products<br>2. Send product data<br>3. Verify response | Product created successfully<br>Returns created product details |
-| TC-025 | Update product via API | Product data | 1. Use PUT /api/products/1<br>2. Send updated data<br>3. Verify response | Product updated successfully<br>Returns updated product details |
-| TC-026 | Delete product via API (Admin) | Product ID | 1. Use DELETE /api/products/1<br>2. Verify response | Product deleted successfully<br>Returns success status |
-| TC-027 | Get inventory via API | N/A | 1. Use GET /api/inventory/products<br>2. Observe response | All products with stock levels return<br>Product details included |
-| TC-028 | Adjust inventory via API | Adjustment data | 1. Use POST /api/inventory/products/1/adjust<br>2. Send adjustment data<br>3. Verify response | Inventory adjusted successfully<br>Stock level updated |
-| TC-029 | Get low stock via API | N/A | 1. Use GET /api/inventory/low-stock<br>2. Observe response | Low stock products return<br>Threshold configurable |
-| TC-030 | Access categories API (Admin) | N/A | 1. Login as Admin<br>2. Use GET /api/categories<br>3. Observe response | All categories return<br>JSON response format correct |
-| TC-031 | Access categories API (Staff) | N/A | 1. Login as Staff<br>2. Use GET /api/categories<br>3. Observe response | 403 Forbidden<br>Message: "Only administrators can access this resource" |
-| TC-032 | Create category via API (Admin) | Category data | 1. Use POST /api/categories<br>2. Send category name<br>3. Verify response | Category created successfully<br>Available in dropdowns |
-| TC-033 | Create category via API (Staff) | Category data | 1. Login as Staff<br>2. Use POST /api/categories<br>3. Observe response | 403 Forbidden<br>Message: "Only administrators can access this resource" |
-| TC-034 | Access Swagger UI | N/A | 1. Navigate to /swagger<br>2. Explore API documentation | Swagger UI loads correctly<br>All endpoints documented |
-| TC-035 | Test API endpoint from Swagger | N/A | 1. Click on an endpoint<br>2. Click 'Try it out'<br>3. Execute request | API call executes successfully<br>Response displays correctly |
-| TC-036 | Verify MVC controllers hidden from Swagger | N/A | 1. Navigate to /swagger<br>2. Check for MVC controller endpoints | Only API controllers visible<br>No duplicate endpoints |
+| TC-001 | User login | Valid credentials | 1. Navigate to login page | User successfully logged in |
+| | | | 2. Enter username and password | Dashboard displays |
+| | | | 3. Click 'Login' | |
+| TC-002 | User logout | N/A | 1. Click user dropdown | User logged out |
+| | | | 2. Click 'Logout' | Redirected to home page |
+| TC-003 | View products | N/A | 1. Navigate to /Products | Product list displays with products |
+| | | | 2. Observe product list | Pagination controls visible |
+| TC-004 | Search products | Search term | 1. Enter search term in search box | Filtered products display |
+| | | | 2. Click search or press Enter | Search results match criteria |
+| TC-005 | Filter by category | Category selection | 1. Select category from dropdown | Only products from selected category display |
+| | | | 2. Observe filtered results | |
+| TC-006 | Sort products | Sort option | 1. Select sort option (Name, Price, Stock) | Products sorted according to selected criteria |
+| | | | 2. Observe sorted list | |
+| TC-007 | Create product | Product data | 1. Click 'Add New Product' | Product created successfully |
+| | | | 2. Fill form with valid data | Redirected to product list |
+| | | | 3. Click 'Create' | |
+| TC-008 | Edit product | Updated data | 1. Click 'Edit' button for a product | Product updated successfully |
+| | | | 2. Modify product details | Changes reflected in list |
+| | | | 3. Click 'Save' | |
+| TC-009 | Delete product (Admin) | N/A | 1. Click 'Delete' button for a product | Product deleted successfully |
+| | | | 2. Confirm deletion | Removed from product list |
+| TC-010 | Delete product (Staff) | N/A | 1. Login as Staff | Delete button is disabled |
+| | | | 2. Navigate to products | Staff cannot delete products |
+| | | | 3. Observe delete button | |
+| TC-011 | View inventory | N/A | 1. Navigate to /Inventory | Inventory list displays |
+| | | | 2. Observe inventory list | All products show current stock levels |
+| TC-012 | Adjust inventory | Quantity change | 1. Click 'Adjust' for a product | Inventory updated successfully |
+| | | | 2. Enter quantity change | Stock level updated |
+| | | | 3. Enter reason | |
+| | | | 4. Click 'Save' | |
+| TC-013 | View categories (Admin) | N/A | 1. Login as Admin | Category list displays |
+| | | | 2. Navigate to /Admin/Categories | All categories with product counts shown |
+| | | | 3. Observe category list | |
+| TC-014 | Create category (Admin) | Category data | 1. Click 'Add New Category' | Category created successfully |
+| | | | 2. Enter category name | Redirected to category list |
+| | | | 3. Click 'Create' | |
+| TC-015 | Edit category (Admin) | Updated data | 1. Click 'Edit' button for a category | Category updated successfully |
+| | | | 2. Modify category name | Changes reflected in list |
+| | | | 3. Click 'Update' | |
+| TC-016 | Delete category (Admin) | N/A | 1. Click 'Delete' button for empty category | Category deleted successfully |
+| | | | 2. Confirm deletion | Removed from category list |
+| TC-017 | Delete category with products (Admin) | N/A | 1. Try to delete category with products | Delete button disabled |
+| | | | 2. Observe behavior | Cannot delete category with products |
+| TC-018 | Access categories (Staff) | N/A | 1. Login as Staff | Access denied |
+| | | | 2. Try to access /Admin/Categories | Redirected to unauthorized page |
+| TC-019 | View product API | N/A | 1. Use GET /api/products | All products return |
+| | | | 2. Observe response | Pagination metadata included |
+| TC-020 | Search products via API | Search term | 1. Use GET /api/products?search=term | Filtered products return |
+| | | | 2. Observe filtered results | Search functionality works |
+| TC-021 | Filter products via API | Category ID | 1. Use GET /api/products?categoryId=1 | Only products from category return |
+| | | | 2. Observe filtered results | Filter functionality works |
+| TC-022 | Sort products via API | Sort parameter | 1. Use GET /api/products?sort=price_desc | Products sorted correctly |
+| | | | 2. Observe sorted results | Sort functionality works |
+| TC-023 | Get single product via API | Product ID | 1. Use GET /api/products/1 | Single product details return |
+| | | | 2. Observe response | All fields populated correctly |
+| TC-024 | Create product via API | Product data | 1. Use POST /api/products | Product created successfully |
+| | | | 2. Send product data | Returns created product details |
+| | | | 3. Verify response | |
+| TC-025 | Update product via API | Product data | 1. Use PUT /api/products/1 | Product updated successfully |
+| | | | 2. Send updated data | Returns updated product details |
+| | | | 3. Verify response | |
+| TC-026 | Delete product via API (Admin) | Product ID | 1. Use DELETE /api/products/1 | Product deleted successfully |
+| | | | 2. Verify response | Returns success status |
+| TC-027 | Get inventory via API | N/A | 1. Use GET /api/inventory/products | All products with stock levels return |
+| | | | 2. Observe response | Product details included |
+| TC-028 | Adjust inventory via API | Adjustment data | 1. Use POST /api/inventory/products/1/adjust | Inventory adjusted successfully |
+| | | | 2. Send adjustment data | Stock level updated |
+| | | | 3. Verify response | |
+| TC-029 | Get low stock via API | N/A | 1. Use GET /api/inventory/low-stock | Low stock products return |
+| | | | 2. Observe response | Threshold configurable |
+| TC-030 | Access categories API (Admin) | N/A | 1. Login as Admin | All categories return |
+| | | | 2. Use GET /api/categories | JSON response format correct |
+| | | | 3. Observe response | |
+| TC-031 | Access categories API (Staff) | N/A | 1. Login as Staff | 403 Forbidden |
+| | | | 2. Use GET /api/categories | Message: "Only administrators can access this resource" |
+| | | | 3. Observe response | |
+| TC-032 | Create category via API (Admin) | Category data | 1. Use POST /api/categories | Category created successfully |
+| | | | 2. Send category name | Available in dropdowns |
+| | | | 3. Verify response | |
+| TC-033 | Create category via API (Staff) | Category data | 1. Login as Staff | 403 Forbidden |
+| | | | 2. Use POST /api/categories | Message: "Only administrators can access this resource" |
+| | | | 3. Observe response | |
+| TC-034 | Access Swagger UI | N/A | 1. Navigate to /swagger | Swagger UI loads correctly |
+| | | | 2. Explore API documentation | All endpoints documented |
+| TC-035 | Test API endpoint from Swagger | N/A | 1. Click on an endpoint | API call executes successfully |
+| | | | 2. Click 'Try it out' | Response displays correctly |
+| | | | 3. Execute request | |
+| TC-036 | Verify MVC controllers hidden from Swagger | N/A | 1. Navigate to /swagger | Only API controllers visible |
+| | | | 2. Check for MVC controller endpoints | No duplicate endpoints |
 
 ---
 
