@@ -38,6 +38,11 @@
                                     <i class="bi bi-gear"></i> Management
                                 </a>
                                 <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                     @if (User.IsInRole("Admin"))
+                                    {
+                                        <li><a class="dropdown-item admin-nav-item" href="/Admin/Dashboard"><i class="bi bi-speedometer2"></i> Admin Dashboard</a></li>
+                                        <li><hr class="dropdown-divider"></li>
+                                    }
                                     <li><a class="dropdown-item" href="/Products"><i class="bi bi-box-seam"></i> Products</a></li>
                                     <li><a class="dropdown-item" href="/Inventory"><i class="bi bi-clipboard-data"></i> Inventory</a></li>
                                     @if (User.IsInRole("Admin"))
