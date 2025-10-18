@@ -45,22 +45,14 @@ This project uses **SQLite** for maximum portability and ease of use:
 ## 🔐 Authentication & Authorization
 
 ### User Roles
-- **Admin** - Full access including DELETE operations
-- **Staff** - Can create, edit, view, and adjust inventory (CANNOT delete products)
+- **Admin** - Full access including DELETE operations (all features visible)
+- **Staff** - Can create, edit, view, and adjust inventory (DELETE button hidden)
 
 ### Demo Accounts
 ```
 Admin:  admin@inventory.com / admin123
 Staff:  staff@inventory.com / staff123
 ```
-
-### Security Features
-- ✅ **Secure Password Hashing** - PBKDF2 algorithm
-- ✅ **Role-Based Access Control** - Different permissions for Admin/Staff
-- ✅ **Session Management** - 2-hour timeout with sliding expiration
-- ✅ **Account Lockout** - 5 failed attempts = 5-minute lockout
-- ✅ **Remember Me** - Persistent login option
-- ✅ **Simplified Identity Model** - Clean, maintainable authentication
 
 ---
 
@@ -76,10 +68,10 @@ Staff:  staff@inventory.com / staff123
 - **View Products** - Paginated list with search and filtering
 - **Create Products** - Add new products with validation
 - **Edit Products** - Update existing product information
-- **Delete Products** - Admin-only product deletion
+- **Delete Products** - Admin-only product deletion (hidden from Staff)
 - **Search & Filter** - Find products by name, SKU, or category
 - **Sort Options** - Sort by name, price, or stock level
-- **Inline Actions** - Edit, Stock, Delete buttons in each row
+- **Inline Actions** - Edit, Stock buttons (Delete button hidden for Staff)
 
 ### 📊 Inventory Management
 - **Transaction History** - Complete audit trail of all stock changes
@@ -127,7 +119,7 @@ Staff:  staff@inventory.com / staff123
 
 1. **Clone and Navigate**
 ```bash
-git clone <repository-url>
+git clone https://github.com/fidzella89/online-inventory.git
 cd OnlineInventory
 ```
 
